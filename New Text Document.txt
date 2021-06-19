@@ -1,0 +1,52 @@
+Test Merchant ID             eWOVEy31711444074118
+Test Account Secret Key      e9w31_1uxHxf1FMF
+
+
+
+
+Cradit card:
+
+Card Number	Any Visa or Master Card
+Expiration      Month & Year	Any Future month and Year
+CVV	123
+OTP	123123
+
+
+
+Account
+
+Mobile Number	77777 77777
+Password	Paytm12345
+OTP		489871
+Doesn’t require 2nd factor authentication
+
+
+
+
+NET banking
+
+Bank Name	Andhra Bank
+User ID	test
+Password	Test
+
+
+
+
+ORDERID: ORDS15787620
+MID: eWOVEy31711444074118
+TXNID: 20190226111212800110168063100275352
+TXNAMOUNT: 1.00
+PAYMENTMODE: CC
+CURRENCY: INR
+TXNDATE: 2019-02-26 18:00:41.0
+STATUS: TXN_SUCCESS
+RESPCODE: 01
+RESPMSG: Txn Success
+GATEWAYNAME: HDFC
+BANKTXNID: 4036217121962950
+BANKNAME: BANK OF AMERICA
+CHECKSUMHASH: 2kwv7XFMUg2kFG+KexYXytaLT2d018q1LNZmwhkt7aJFRBbuazb2eBFh5FrlzEL5F1qlifGP9VajLyreFFt9Ww+2x/3bB0xrcxGGffVZETY=
+
+
+
+https://console.developers.google.com/apis/credentials/key/15486718-77e4-4f96-b1ec-63cf02b3822c?project=premier-ceramic-1548600186240&folder&organizationId
