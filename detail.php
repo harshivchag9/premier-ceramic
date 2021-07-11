@@ -1,6 +1,6 @@
 <?php 
   session_start(); 
-  require('php/recentview.php')
+  require('api/recentview.php')
 ?>
 <!DOCTYPE html>
 <html>
@@ -29,15 +29,17 @@
 	  <script src="js/refresh.js"></script> 
     <style>
    .img-fluid1 {
-    width: 200px; /* You can set the dimensions to whatever you want */
-    height: 200px;
+    width: 300px; /* You can set the dimensions to whatever you want */
+    height: 250px;
     object-fit: cover;
 }
+   </style>
+  
    </style>
 	  <script type="text/javascript">
 	    function click_wishlist(id){
        	//var productid = $('#productid').val();  
-				  $.post('php/wish.php' , { id:id } , function(data){
+				  $.post('api/add-wish.php' , { id:id } , function(data){
 				  alert('Item Added To wishlist');
 				  jQuery('#wishlist-'+id).addClass("btn btn-outline-primary disabled");
 				  $('#wishlist-'+id).prop("onclick", null);
@@ -55,22 +57,22 @@
     </script>
   </head>
   <body>
-	  <?= require('header.php') ?>
+	  <?php  require('header.php') ?>
     <div id="all">
       <div id="content">
         <div class="container">
+        <br/>
           <div class="row">
           <?php
             require_once("database/database.config.php");
-            $db = new Database();
             $sql = Database::getConnection();
 			
     			  if (isset($_GET['id'])) 
 		  		  {	
-  					  $data = $sql->query("SELECT * FROM product_detail WHERE product_id ='$_GET[id]' LIMIT 1");
-	  				  if(mysqli_num_rows($data) > 0)
+  					  $data = $sql->query("SELECT * FROM product_detail WHERE product_id ='$_GET[id]' AND `product_status`=0 LIMIT 1");
+	  				  if($data->num_rows > 0)
 		  			  {
-			  			  while($row = mysqli_fetch_array($data))
+			  			  while($row =$data->fetch_array())
 				  		  {  
           ?>
             
@@ -79,13 +81,21 @@
                 <div class="col-md-6">
                   <div data-slider-id="1" class="owl-carousel shop-detail-carousel">
                   <?php
-                    $res1=$sql->query("select * from product_photo WHERE product_id='$row[productimg]'");
-                      while($row1=mysqli_fetch_array($res1))
+
+                    $res1=$sql->query("select * from product_photo WHERE product_id='$row[product_id]'");
+                    if($res1->num_rows>0)
+                    {
+                      
+                      while($row1=$res1->fetch_array())
                       { 
 					        ?>
-                        <div class="item"> <img src="<?php echo $row1['image'];?>" alt="" class="img-fluid"></div>
+                        <div class="item"> <img src="<?= $row1['image']?>" alt="" class="img-fluid"></div>
                   <?php 
                       } 
+                    }
+                    else{
+                      echo '<div class="item"> <img src="img/No_image_available.png" alt="" class="img-fluid"></div>';
+                    }
                   ?>
                     <!--<div class="item"> <img src="img/detailbig2.jpg" alt="" class="img-fluid"></div>
                     <div class="item"> <img src="img/detailbig3.jpg" alt="" class="img-fluid"></div>-->
@@ -106,7 +116,7 @@
                     else
                     {
                       $sql1= $sql->query("SELECT * FROM cart WHERE Product_id='$row[product_id]' AND User_id='$_SESSION[loggeduserid]' LIMIT 1");
-                      $numberofrow = mysqli_num_rows( $sql1 );
+                      $numberofrow = $sql1->num_rows;
                       if ( $numberofrow < 1 )
                       { 
                   ?>
@@ -125,7 +135,7 @@
                     else
                     {						
 							        $sql1=$sql->query("SELECT * FROM wishlist WHERE Product_id='$row[product_id]' AND User_id='$_SESSION[loggeduserid]' LIMIT 1");
-                      $numberofrow2 = mysqli_num_rows( $sql1 );
+                      $numberofrow2 = $sql1->num_rows;
                       if ( $numberofrow2 < 1 )
                       {
 					      	?>
@@ -144,12 +154,18 @@
                 </div>
                 <div data-slider-id="1" class="owl-thumbs">
                   <?php  
-                    $res2=$sql->query("select * from product_photo WHERE product_id='$row[productimg]'");
-                    while($row2=mysqli_fetch_array($res2))
-                    { 
-                  ?>
-                      <button class="owl-thumb-item"><img src="<?= $row2['image']  ?>" alt="" class="img-fluid"></button>
-                  <?php 
+                    $res2=$sql->query("select * from product_photo WHERE product_id='$row[product_id]'");
+                    if($res1->num_rows>0)
+                    {
+                      while($row2=$res2->fetch_array())
+                      { 
+                    ?>
+                        <button class="owl-thumb-item"><img src="<?= $row2['image']  ?>" alt="" class="img-fluid"></button>
+                    <?php 
+                      }
+                    }
+                    else{
+
                     } 
                   ?>
                     <!--<button class="owl-thumb-item"><img src="img/detailsquare2.jpg" alt="" class="img-fluid"></button>
@@ -186,7 +202,7 @@
 					}
 				} else 
 			 	{
-					echo "Data to render this page is missing.";
+					echo "Product Unavailable";
 					exit();
 			 	}
         if(isset($_SESSION['loggeduserid']))
@@ -201,28 +217,23 @@
 				    <?php 
 				      $count=0;
               $res=$sql->query("SELECT product_id FROM recent WHERE user_id=$_SESSION[loggeduserid]");
-              while($row1=mysqli_fetch_assoc($res))
+              while($row1=$res->fetch_assoc())
               {
 					      $res1=$sql->query("SELECT * FROM product_detail WHERE product_id=$row1[product_id]");
-                while($row=mysqli_fetch_assoc($res1))
+                while($row=$res1->fetch_assoc())
                 {
                   if($count==3)
                   {
 				            echo "<div class='col-lg-3 col-md-6'></div>";
                   } 
-                  $res2=$sql->query("select * from product_photo WHERE product_id='$row[productimg]'");
-                  while($row2=mysqli_fetch_array($res2))
+                  $res2=$sql->query("select * from product_photo WHERE product_id='$row[product_id]'");
+                  while($row2=$res2->fetch_array())
                   { 
+                    $image = (isset($row2['image']))?$row2['image']:"img/No_image_available.png";
 					  ?>
                     <div class="col-lg-3 col-md-6">
                       <div class="product same-height">
-                        <div class="flip-container">
-                          <div class="flipper">
-                            <div class="front"><a href="detail.php?id=<?=$row['product_id']?>"><img src="<?=$row2['image'] ?>" alt="" class="img-fluid img-fluid1"></a></div>
-                            <div class="back"><a href="detail.php?id=<?=$row['product_id']?>"><img src="<?=$row2['image'] ?>" alt="" class="img-fluid img-fluid1"></a></div>
-                          </div>
-                        </div>
-                        <a href="detail.php?id=<?= $row['product_id'] ?>" class="invisible"><img src="<?=$row2['image'] ?>" alt="" class="img-fluid img-fluid1"></a>
+                          <a href="detail.php?id=<?=$row['product_id']?>"><img src="<?=$image?>" alt=""  class="img-fluid1"></a>
                         <div class="text">
                           <h3><?=$row['product_name'] ?></h3>
                           <p class="price">&#8377;<?=$row['price'] ?></p>
@@ -242,7 +253,7 @@
         </div>
       </div>
     </div>
-   <?= require('footer.php') ?>
+   <?php require('footer.php') ?>
 
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/popper.js/umd/popper.min.js"> </script>
@@ -252,5 +263,6 @@
     <script src="vendor/owl.carousel2.thumbs/owl.carousel2.thumbs.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js"></script>
     <script src="js/front.js"></script>
+    <script src="js/basket.js"></script>
   </body>
 </html>

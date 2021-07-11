@@ -1,6 +1,5 @@
 ﻿<?php 
   session_start();
-  
 ?>
 <!DOCTYPE html>
 <html>
@@ -27,11 +26,13 @@
     <!-- Favicon-->
     <link rel="shortcut icon" href="favicon.png">
   </head>
+  
   <body onLoad="load();">
 	  <script type="text/javascript">
 	  	function load()
 			{
-				document.getElementById('navindex').className='nav-link active';
+        $("#navindex").addClass("nav-link active");
+				// document.getElementById('navindex').className='nav-link active';
 			}
 	  </script>
     <?php require('header.php')?>
@@ -109,7 +110,7 @@
                   <!--<p class="author-category">By <a href="#">John Slim</a> in <a href="">Fashion and style</a></p>-->
                   <hr>
                   <p class="intro">Twin Charge tiles have very long life compared to traditional Soluble Salt tiles. Very good for place which has heavy wear and tear. Twin-Charge gives benefits of both Double Charge and GVT, because it has strength of Double Charge and Beauty of Glazed Vitrified Tiles.</p>
-                  <p class="read-more"><a href="post.html" class="btn btn-primary">Continue reading</a></p>
+                  <!-- <p class="read-more"><a href="post.html" class="btn btn-primary">Continue reading</a></p> -->
                 </div>
               </div>
               <div class="col-sm-6">
@@ -118,7 +119,7 @@
                   <!--<p class="author-category">By <a href="#">John Slim</a> in <a href="">About Minimal</a></p>-->
                   <hr>
                   <p class="intro">digital tiles are also type of vitrified tiles its digital printed tiles unlimited design possibilities, high resolution printing and sharper finishes, vitrified tiles in various styles have started to become the ceramic art . Vitrified tile is a ceramic tile with very low porosity.</p>
-                  <p class="read-more"><a href="post.html" class="btn btn-primary">Continue reading</a></p>
+                  <!-- <p class="read-more"><a href="post.html" class="btn btn-primary">Continue reading</a></p> -->
                 </div>
               </div>
             </div>

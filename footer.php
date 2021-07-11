@@ -7,7 +7,7 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="all,follow">
-    <!-- Bootstrap CSS-->
+   Bootstrap CSS-->
    <!-- <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="vendor/font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:400,500,700,300,100">
@@ -67,16 +67,7 @@
           </div>
           <!-- /.col-lg-3-->
           <div class="col-lg-3 col-md-6">
-            <h4 class="mb-3">Get the news</h4>
-            <p class="text-muted">Subscribe to get our lettest news. Put your Email below. </p>
-            <form>
-              <div class="input-group">
-                <input type="text" class="form-control"><span class="input-group-append">
-                  <button type="button" class="btn btn-outline-secondary">Subscribe!</button></span>
-              </div>
-              <!-- /input-group-->
-            </form>
-            <hr>
+            
             <h4 class="mb-3">Stay in touch</h4>
             <p class="social"><a href="#" class="facebook external"><i class="fa fa-facebook"></i></a><a href="#" class="twitter external"><i class="fa fa-twitter"></i></a><a href="#" class="instagram external"><i class="fa fa-instagram"></i></a><a href="#" class="gplus external"><i class="fa fa-google-plus"></i></a><a href="#" class="email external"><i class="fa fa-envelope"></i></a></p>
           </div>

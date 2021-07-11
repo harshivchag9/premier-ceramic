@@ -38,7 +38,6 @@
               <!-- post-->
         <?php 
           require_once("database/database.config.php");
-          $db = new Database();
           $sql = Database::getConnection();
           $res=$sql->query('select *from blog');
           while($row=mysqli_fetch_assoc($res))

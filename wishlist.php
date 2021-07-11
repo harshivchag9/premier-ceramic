@@ -1,7 +1,10 @@
 <?php session_start();	 
 	require_once("database/database.config.php");
-	$db = new Database();
 	$sql = Database::getConnection();
+  if(!isset($_SESSION['loggeduserid']))
+  {
+    header("location: register.php");
+  }
 ?>
 
 <!DOCTYPE html>
@@ -30,15 +33,23 @@
     <link rel="shortcut icon" href="favicon.png">
    <style>
    .img-fluid {
-    width: 200px; /* You can set the dimensions to whatever you want */
+    width: 230px; /* You can set the dimensions to whatever you want */
     height: 200px;
     object-fit: cover;
+}
+
+.myButton {
+  position: absolute;
+top: 5px;
+right: 20px;
+
 }
    </style>
 		<script src="js/refresh.js" ></script>
   </head>
   <body>
-    <?=require('header.php')?>
+    <?php require('header.php')?>
+    <br/>
     <div id="all">
       <div id="content">
         <div class="container">
@@ -59,7 +70,7 @@
                 </div>
                 <div class="card-body">
                   <ul class="nav nav-pills flex-column">
-                  <a href="orderHistory.php" class="nav-link"><i class="fa fa-list"></i> My orders</a>
+                  <a href="your-order.php" class="nav-link"><i class="fa fa-list"></i> My orders</a>
                   <a href="wishlist.php" class="nav-link active"><i class="fa fa-heart"></i> Wishlist</a>
                   </ul>
                 </div>
@@ -68,46 +79,36 @@
             <div id="wishlist" class="col-lg-9">
               <div class="box">
                 <h1>My wishlist</h1>
-                <p class="lead">Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.</p>
               </div>
             <div class="row products">
           <?php
 						$res=$sql->query("select * from wishlist WHERE User_id = $_SESSION[loggeduserid]");
 						$row = "";
-						while($row = mysqli_fetch_array($res))
+						while($row = $res->fetch_array())
 						{
-              $row1=mysqli_fetch_array($sql->query("select * from product_detail WHERE product_id = $row[Product_id]"));
+              $response=$sql->query("select * from product_detail WHERE product_id = $row[Product_id]");
+              if($response->num_rows > 0)
+              {
+                $row1=$response->fetch_array();
 
-              $res2=$sql->query("select * from product_photo WHERE product_id='$row1[productimg]' LIMIT 1");
-              $row2=mysqli_fetch_array($res2);
-             
-              $image=	isset($row2['image'])?$row2['image'] :"";
+                $res2=$sql->query("select * from product_photo WHERE product_id='$row1[product_id]' LIMIT 1");
+                $row2=$res2->fetch_array();
+              
+                $image=	isset($row2['image'])?$row2['image'] :"img/No_image_available.png";
 		      ?>
           		<div class="col-lg-3 col-md-4">
                 <div class="product">
-                  <div class="flip-container">
-                    <div class="flipper">
-                      <div class="front">
-                        <?php
-                          echo'<a href="detail.php?id=' . $row1['product_id'] . '"><img src="' . $image . '" alt=""  class="img-fluid"></a>';
-                        ?>
-                      </div>
-                      <div class="back">
-        							  <?php
-									        echo'<a href="detail.php?id=' . $row1['product_id'] . '"><img src="' . $image . '"  alt="" class="img-fluid"></a>';
-          							?>
-					            </div>
-                    </div>
-                  </div> 
-    							<?php
+                  <?php
 		    						echo'<a href="detail.php?id=' . $row1['product_id'] . '"><img src="' . $image . '" alt=""  class="img-fluid"></a>';
   					  		?>
+                  <a type="button" href="api/remove-from-wish.php?id=<?=$row1['product_id']?>"  style=" color:red; opacity:1" class="close myButton" >&times;</a>
+    							
                   <div class="text">
                     <h3>
                       <?= '<a href=" detail.php?id=' . $row1['product_id'] . ' ">'.$row1['product_name'].'</a>'?>
 					          </h3>
         					  <p class="price">
-                      <del></del> &#8377 <?php echo($row1['price']);  ?>
+                      <del></del> &#8377 <?=$row1['price']  ?>
                     </p>
                     <p class="buttons">
         						  <?='<a href=" detail.php?id=' . $row1['product_id'] . ' " class="btn btn-outline-secondary"> View detail </a>' ?>
@@ -132,6 +133,7 @@
                 </div>
               </div>
       <?php
+              }
            }	
       ?>
         </div>
@@ -140,7 +142,7 @@
   </div>
 </div>
 </div>
-<?=require('footer.php')?>
+<?php require('footer.php')?>
     
 
     <script src="vendor/jquery/jquery.min.js"></script>

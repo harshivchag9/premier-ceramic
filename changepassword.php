@@ -1,22 +1,51 @@
 <?php
-
-
 session_start();
-if(isset($_POST['submit'])){
+if(!isset($_SESSION['userData']))
+{
+	header("location:index.php");
+}
+
+if(isset($_POST['submit']))
+{
 	require_once("database/database.config.php");
-	$db = new Database();
 	$sql = Database::getConnection();
-	$email=$_SESSION['loggeduserid'];
+
+	$userId =$_SESSION['loggeduserid'];
 	$password=$_POST['password'];
-	$conformpassword=$_POST['cfmpassword'];
-	if($password==$conformpassword){
-		$password=base64_encode($password);
-		$sql->query("UPDATE `registration` SET `pswrd`='$password' WHERE `registration`.`user_id`='$email'");
-		//header("location:register.php");
-	}else{
-		echo "pasword does not match";
-		return;
+	$oldPassword = $_POST['oldPassword'];
+	$confirmPassword=$_POST['confirmPassword'];
+
+	if($response = $sql->query("SELECT * FROM `registration` WHERE `registration`.`user_id` = '$userId' LIMIT 1"))
+	{
+		$data = $response->fetch_assoc();
+		if($data['pswrd'] === base64_encode($oldPassword) )
+		{
+			if($password==$confirmPassword){
+				$password=base64_encode($password);
+				$sql->query("UPDATE `registration` SET `pswrd`='$password' WHERE `registration`.`user_id`='$userId'");
+				$_SESSION[ 'message' ] = "Password changed successfully";
+
+			}else{
+				$_SESSION[ 'message' ] = "Password does not match";
+				header( "location:changepassword.php" );
+				exit;
+			}
+		}
+		else
+		{
+			$_SESSION[ 'message' ] = "Incorrect Password";
+			header( "location:changepassword.php" );
+			exit;
+		}
 	}
+	else
+	{
+		$_SESSION[ 'message' ] = "Something went wrong! please try after sometime";
+		header( "location:changepassword.php" );
+		exit;
+	}
+
+	
 }
 	
 ?>
@@ -44,6 +73,29 @@ if(isset($_POST['submit'])){
     <link rel="stylesheet" href="css/custom.css">
     <!-- Favicon-->
     <link rel="shortcut icon" href="favicon.png">
+	<script src="vendor/jquery/jquery.min.js"></script>
+
+	<script type="text/javascript">
+
+		$(document).ready(function() {
+			
+
+				$("#show-password").change(function(){
+					if($(this).prop("checked")) 
+					{
+						$("#oldPassword").prop("type", "text");
+						$("#password").prop("type", "text");
+						$("#confirmPassword").prop("type", "text");
+					}
+					else
+					{
+						$("#oldPassword").prop("type", "password");
+						$("#password").prop("type", "password");
+						$("#confirmPassword").prop("type", "password");
+					}
+				});
+			});
+	</script>
 </head>
 <body>
 	
@@ -55,20 +107,42 @@ if(isset($_POST['submit'])){
             <div class="container">
                 <div class="row">
 					<form action='changepassword.php' class="form-control" method='post'>
+
+
+
+
+					
 						<table >
+						<p class="text-left" style="color: red;">
+                                        <strong>
+                                            <?php 
+                                                echo isset($_SESSION['message'])?$_SESSION['message']:"";
+                                                unset($_SESSION['message']);
+                                            ?> 
+                                        </strong>
+                                    </p>
+							<tr>
+								<td>Old Password :</td>
+								<td><input type='password' class="form-control" name='oldPassword' id="oldPassword"  pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"  /></td>
+							</tr>
 							<tr>
 								<h1>Change Password<h1>
 								<td>password :</td>
-								<td><input type='text' class="form-control" name='password'  pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"  /></td>
+								<td><input type='password' class="form-control" name='password' id="password"  pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"  /></td>
 							</tr>
 							<tr>
 								<td>Conform Password :</td>
-								<td><input type='text' class="form-control" name='cfmpassword'  pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" /></td>
+								<td><input type='password' class="form-control" name='confirmPassword' id="confirmPassword" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" /></td>
+							</tr>
+							<tr>
+								<td></td>
+								<td><input type="checkbox" id="show-password"> <label for="show-password">Show Password</td>
 							</tr>
 							<tr>
 								<td></td>
 								<td><input type='submit' class="btn btn-primary" name='submit' value='Submit'/></td>
 							</tr>
+							
 						</table>
 					</form>
 				</div>
@@ -81,6 +155,5 @@ if(isset($_POST['submit'])){
 	<br>
 	<br>
 	<?php require('footer.php')?>
-
 </body>
 </html>

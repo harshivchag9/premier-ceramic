@@ -4,12 +4,13 @@
             <div  class="col-lg-6 offer mb-3 mb-lg-0"></div>
             <div class="col-lg-6 text-center text-lg-right">
               <ul class="menu list-inline mb-0">
-                <?= isset($_SESSION['loggedusername'])?'':'<li class="list-inline-item"><a id="login" href="#" data-toggle="modal" data-target="#login-modal">Login</a></li>'?>
-                <?= isset($_SESSION['loggedusername'])?'':'<li class="list-inline-item"><a href="register.php">Register</a></li>'?>
-                <li class="list-inline-item"><a href="contact.php">Contact us</a></li>
+                <?= isset($_SESSION['userData'])?'':'<li class="list-inline-item"><a id="login" href="#" data-toggle="modal" data-target="#login-modal">Login</a></li>'?>
+                <?= isset($_SESSION['userData'])?'':'<li class="list-inline-item"><a href="register.php">Register</a></li>'?>
+                <li class="list-inline-item"><a href="contact-us.php">Contact us</a></li>
                 <li class="list-inline-item"><a href="blog.php">Blog</a></li>
-                <li class="list-inline-item"><a href="changepassword.php">Change Password</a></li>
-                <?= isset($_SESSION['loggedusername'])?'<li class="list-inline-item"><a href="logout.php">Logout</a></li>':''?>
+                
+                <?= isset($_SESSION['userData'])?'<li class="list-inline-item"><a href="changepassword.php">Change Password</a></li>':''?>
+                <?= isset($_SESSION['userData'])?'<li class="list-inline-item"><a href="api/logout.php">Logout</a></li>':''?>
               </ul>
             </div>
           </div>
@@ -24,18 +25,19 @@
                 <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">×</span></button>
               </div>
               <div class="modal-body">
-                <form action="login.php" method="post">
+                <form action="api/login.php" method="post">
                   <div class="form-group" style="color: red;">
                     <strong>
-                    	<?=isset($_SESSION['loginmsg'])?$_SESSION['loginmsg']:""?>
-							        <?php unset($_SESSION['loginmsg'])?> 
+                    	<?php $message =  isset($_SESSION['loginmsg'])?$_SESSION['loginmsg']:"";
+							         unset($_SESSION['loginmsg']);?> 
+                       <?=$message?>
                     </strong>
                   </div>
 					        <div class="form-group">
-                    <input name="emailid" type="text" placeholder="email" class="form-control">
+                    <input name="emailid" type="text" placeholder="email" value="harshivchag@gmail.com" class="form-control">
                   </div>
                   <div class="form-group">
-                    <input name="password1" type="password" placeholder="password" class="form-control">
+                    <input name="password1" type="password" placeholder="password" value="H@rshiv1711" class="form-control">
                   </div>
                   <p class="text-center">
                     <button class="btn btn-primary"><i class="fa fa-sign-in"></i> Log in</button>
@@ -51,7 +53,7 @@
 
         <!-- *** TOP BAR END ***-->
       <nav class="navbar navbar-expand-lg">
-        <div class="container"><a href="index.html" class="navbar-brand home"><img src="img/premierlogo.png" alt="Premier Logo" class="d-none d-md-inline-block"><img src="img/premierlogo1.png" alt="Premier logo" class="d-inline-block d-md-none"><span class="sr-only">Premier Ceramic</span></a>
+        <div class="container"><a href="index.html" class="navbar-brand home"><img src="img/premierlogo.png" alt="Premier Logo" class="d-none d-md-inline-block"><img src="img/premierlogo1.png" alt="Obaju logo" class="d-inline-block d-md-none"><span class="sr-only">Obaju - go to homepage</span></a>
           <div class="navbar-buttons">
             <button type="button" data-toggle="collapse" data-target="#navigation" class="btn btn-outline-secondary navbar-toggler"><span class="sr-only">Toggle navigation</span><i class="fa fa-align-justify"></i></button>
             <button type="button" data-toggle="collapse" data-target="#search" class="btn btn-outline-secondary navbar-toggler"><span class="sr-only">Toggle search</span><i class="fa fa-search"></i></button><a href="basket.html" class="btn btn-outline-secondary navbar-toggler"><i class="fa fa-shopping-cart"></i></a>
@@ -60,10 +62,10 @@
             <ul class="navbar-nav mr-auto">
               <li class="nav-item"><a href="index.php" id="navindex" class="nav-link deactive">Home</a></li>
               <li class="nav-item"><a href="category.php" id="navcategory" class="nav-link deactive">Product</a></li>
-              <li class="nav-item"><a href="map.php" class="nav-link deactive">Store Locator</a></li>
-              <li class="nav-item"><a href="calc.php" class="nav-link deactive">Calculator</a></li>
-              <li class="nav-item"><a href="orderHistory.php" class="nav-link deactive">Order</a></li>
-              <li class="nav-item"><a href="contact.php" class="nav-link deactive">Contact US</a></li>
+              <li class="nav-item"><a href="store-locator.php" class="nav-link deactive">Store Locator</a></li>
+              <li class="nav-item"><a href="tiles-calculator.php" class="nav-link deactive">Calculator</a></li>
+              <li class="nav-item"><a href="your-orders.php" class="nav-link deactive">Order</a></li>
+              <li class="nav-item"><a href="contact-us.php" class="nav-link deactive">Contact US</a></li>
               <!-- <li class="nav-item dropdown menu-large"><a href="#" data-toggle="dropdown" data-hover="dropdown" data-delay="200" class="dropdown-toggle nav-link">Catagory<b class="caret"></b></a>
                 <ul class="dropdown-menu megamenu">
                   <li>

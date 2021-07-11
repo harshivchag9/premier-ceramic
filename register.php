@@ -1,6 +1,10 @@
 ﻿<?php 
 	session_start();
-	
+	if(isset($SESSION['loggeduserid']))
+    {
+        header("location: index.php");
+        exit();
+    }
 ?>
 <!DOCTYPE html>
 <html>
@@ -28,12 +32,13 @@
     <link rel="shortcut icon" href="favicon.png">
 </head>
 <body>
-    <?=require('header.php')?>
+    <?php require('header.php')?>
     <div id="all">
         <div id="content">
             <div class="container">
                 <div class="row">
                     <div class="col-lg-12">
+                    <br/>
                         <nav aria-label="breadcrumb">
                             <ol class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="#">Home</a></li>
@@ -47,7 +52,7 @@
                             <p class="lead">Not our registered customer yet?</p>
                             <p class="text-muted">If you have any questions, please feel free to <a href="contact.php">contact us</a>, our customer service center is working for you 24/7.</p>
                             <hr>
-                            <form action="registration.php" method="post">
+                            <form action="api/registration.php" method="post">
                                 <div class="form-group">
                                     <p class="text-left" style="color: red;">
                                         <strong>
@@ -56,7 +61,7 @@
                                                 echo isset($_SESSION['message1'])?$_SESSION['message1']:"";
                                                 unset($_SESSION['message']);
                                                 unset($_SESSION['message1']);
-                                                require('error.php')
+                                                // require('error.php')
                                             ?> 
                                         </strong>
                                     </p>
@@ -89,15 +94,11 @@
                             <h1>Login</h1>
                             <p class="lead">Already our customer?</p>
                             <hr>
-                            <form action="login.php" method="post">
+                            <form action="api/login.php" method="post">
 								 <div class="form-group">
                                     <p class="text-left" style="color: red;">
 										<strong>
-                                            <?php 
-                                                // echo isset($_SESSION['loginmsg'])?$_SESSION['loginmsg']:"";
-                                                // unset($_SESSION['loginmsg']);
-		    									require('error.php');
-											?> 
+                                            <?=$message?> 
 										</strong>
 									 </p>
                                 </div>
@@ -120,7 +121,7 @@
             </div>
         </div>
     </div>
-    <?=require('footer.php') ?>
+    <?php require('footer.php') ?>
 
 	
     <script src="vendor/jquery/jquery.min.js"></script>

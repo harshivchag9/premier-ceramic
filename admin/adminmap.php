@@ -11,12 +11,12 @@ session_start();
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="all,follow">
-    <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="vendor/font-awesome/css/font-awesome.min.css">
-    <link rel="stylesheet" href="vendor/owl.carousel/assets/owl.carousel.css">
-    <link rel="stylesheet" href="vendor/owl.carousel/assets/owl.theme.default.css">
-    <link rel="stylesheet" href="css/style.default.css" id="theme-stylesheet">
-    <link rel="stylesheet" href="css/custom.css">
+    <link rel="stylesheet" href="../vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../vendor/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../vendor/owl.carousel/assets/owl.carousel.css">
+    <link rel="stylesheet" href="../vendor/owl.carousel/assets/owl.theme.default.css">
+    <link rel="stylesheet" href="../css/style.default.css" id="theme-stylesheet">
+    <link rel="stylesheet" href="../css/custom.css">
     <link rel="shortcut icon" href="../favicon.ico">
 	<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
     <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
@@ -43,7 +43,7 @@ session_start();
                          <div class="form-group">
 						   <div class="row" style="height: 750px; ">
 	 							<?php 
-									require('php/map/mapdata.php');
+									require('class/mapdata.php');
 									$map = new mapdata;
 									$row = $map->getdata();
 									$row = json_encode($row ,true);
@@ -79,13 +79,9 @@ session_start();
 	
 	
     <!-- JavaScript files-->
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/popper.js/umd/popper.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
-    <script src="vendor/jquery.cookie/jquery.cookie.js"></script>
-    <script src="vendor/owl.carousel/owl.carousel.min.js"></script>
-    <script src="vendor/owl.carousel2.thumbs/owl.carousel2.thumbs.js"></script>
-    <script src="js/front.js"></script>
+    <script src="../vendor/jquery/jquery.min.js"></script>
+    <script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../js/front.js"></script>
 	 
 </body>
 </html>

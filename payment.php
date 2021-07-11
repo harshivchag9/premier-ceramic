@@ -1,7 +1,6 @@
 <?php
 	session_start();
 	require_once("database/database.config.php");
-	$db = new Database();
 	$sql = Database::getConnection();
 ?>
 
@@ -10,7 +9,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Obaju : e-commerce template</title>
+    <title>premier Ceramic</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="all,follow">
@@ -31,7 +30,7 @@
     <link rel="shortcut icon" href="favicon.png">
   </head>
   <body>
-	  <?= require('header.php')  ?>
+	  <?php require('header.php')  ?>
     <div id="all">
       <div id="content">
         <div class="container">
@@ -49,12 +48,12 @@
               <div class="box">
                 <form method="get" action="checkout4.html">
                   <h1>Checkout - Payment method</h1>
-                  <div class="nav flex-column flex-sm-row nav-pills"><a href="Order1.php" class="nav-link flex-sm-fill text-sm-center"> <i class="fa fa-map-marker">                  </i>Address</a><a href="payment.php" class="nav-link flex-sm-fill text-sm-center active"> <i class="fa fa-money">                      </i>Payment Method</a><a href="" class="nav-link flex-sm-fill text-sm-center disabled"> <i class="fa fa-eye">                     </i>Order Review</a></div>
+                  <div class="nav flex-column flex-sm-row nav-pills"><a  class="nav-link flex-sm-fill text-sm-center disabled"> <i class="fa fa-map-marker">                  </i>Address</a><a href="payment.php" class="nav-link flex-sm-fill text-sm-center active"> <i class="fa fa-money">                      </i>Payment Method</a><a href="" class="nav-link flex-sm-fill text-sm-center disabled"> <i class="fa fa-eye">                     </i>Order Review</a></div>
                   <div class="content py-3">
                     <div class="row">
                       <div class="col-md-6 col-xl-4">
                         <div class="box payment-method">
-		              				<a href="Paytm/paytm.php" >
+		              				<a href="api/paytm/paytm.php" >
                           <h4>paytm Gateway</h4>
                           <p>We like it all.</p>
                          </a>
@@ -122,7 +121,7 @@
         </div>
       </div>
     </div>
-	  <?= require('footer.php') ?>
+	  <?php require('footer.php') ?>
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/popper.js/umd/popper.min.js"> </script>
     <script src="vendor/bootstrap/js/bootstrap.min.js"></script>

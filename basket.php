@@ -1,13 +1,16 @@
 <?php 
 	session_start();
-
+  if(!isset($_SESSION['loggeduserid']))
+  {
+    header("location: register.php");
+  }
 ?>
 <!DOCTYPE html>
 <html>
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Obaju : e-commerce template</title>
+    <title>Premier Ceramic</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="all,follow">
@@ -30,32 +33,29 @@
 	  
   function remove(id)
   {
-    $.post('php/removecartitem.php' , { id : id} , function(data){
-    var at = document.getElementById("alltotal").innerHTML;
-    var ti = document.getElementById('total-'+id).innerHTML;
-    document.getElementById("alltotal").innerHTML =Number(at)-Number(ti);  
-      $('#product-'+id).remove(); 
+    $.post('api/removecartitem.php' , { id : id} , function(data){
+        $("#alltotal").html( Number($("#alltotal").html())-Number($("#total-"+id).html()));
+        $('#product-'+id).remove(); 
         location.reload();
       });
   }
   function UpdateProductTotal(cartid)
-  {							  
-    var price = document.getElementById("price-"+cartid).value;
-    var q = document.getElementById("quantity-"+cartid).value;
-    var t = Number(price) * Number(q);	
-    document.getElementById('total-'+cartid).innerHTML = Number(t);
+  {		
+    var price = Number($("#price-"+cartid).val());					  
+    var quantity = Number($("#quantity-"+cartid).val());
+    $('#total-'+cartid).html(price*quantity)
     
     UpdateCart();
-    CartDbUpdate(cartid,q);
+    CartDbUpdate(cartid,quantity);
   }
   function UpdateCart()
   {	
     var t=0,i=0,v=0;
-    var tc = document.getElementById('tcount').value;
+    var tc = $("#tcount").val();
     var ShippingCost = 0;
     for(i=1;i<=tc;i++)
     {
-      var v = document.getElementById("price-"+i).innerHTML;
+      var v = document.getElementById("price-"+i).innerHTML; 
       var q1 = document.getElementsByName('quantity1-'+i)[0].value;	  
       t = Number(t) + (Number(v)*Number(q1));  
       ShippingCost += Number(q1) * 15;
@@ -70,16 +70,18 @@
   }
   function CartDbUpdate(cart_id,quantity)
   {
-    $.post('php/cartquantity.php' , { cart_id : cart_id, quantity:quantity} , function(data){});
+    $.post('api/update-cart-value.php' , { cart_id : cart_id, quantity:quantity} , function(data){
+      var obj = jQuery.parseJSON(data);
+      if(obj.responseBool=false){
+        alert("Something Went Wrong Please Try After Sometime");
+      }
+    });
   }
-  function f2(t)
-  {
-  document.getElementById('alltotal').innerHTML = Number(t);  
-  }
+ 
 </script>
   </head>
   <body>
-	<?=require('header.php')?>
+	<?php require('header.php')?>
     
     
     <div id="all">
@@ -89,7 +91,7 @@
             
             <div id="basket" class="col-lg-9">
               <div class="box">
-                <form method="post" action="php/order.php">
+                <form method="post" action="api/create-checkout.php">
                   <h1>Shopping cart</h1>
                   <div class="table-responsive">
                     <table class="table">
@@ -107,32 +109,36 @@
 						   
 				  <?php
               require_once("database/database.config.php");
-              $db = new Database();
               $sql = Database::getConnection();
 						  if(isset($_SESSION['loggeduserid']))
             	{
-						    $dbcon=mysqli_connect('localhost','root','','premierdb');
 						    $res=$sql->query("select * from cart WHERE User_id = $_SESSION[loggeduserid]");
 						    $row = "";
+                $notAvailableCount=0;
 						    $ship=0;$count=0;$delivery=0;$total=0;
-						    while($row = mysqli_fetch_array($res))
+						    while($row = $res->fetch_array())
 						    {
 						      $count++;		
-						      $row1=mysqli_fetch_array($sql->query("select * from product_detail WHERE product_id = $row[Product_id]"));
+						      $row1=$sql->query("select * from product_detail WHERE product_id = $row[Product_id]")->fetch_array();
+                  if($row1['product_status']==1)
+                  {
+                    $sql->query("DELETE FROM `cart` WHERE `Product_id` = $row1[product_id] AND `User_id` = $_SESSION[loggeduserid] ");
+                    $notAvailableCount++;
+                    continue;
+                  }
 					?>
 						  		 
                   <tr id="product-<?=$row['cart_id']; ?>">
-                    <td><a href="#"><img src="<?=$row1['productimg'];?>" alt=""></a></td>
-                    <td><a href="#"><?=$row1['product_name'];?></a></td>
+                    <td><a href="detail.php?id=<?=$row1['product_id']; ?>"><?=$row1['product_name'];?></a></td>
                     <td>
                       <input name="id-<?=$count; ?>" type="hidden" value="<?=$row['Product_id']; ?>" >
-                      <input name="quantity1-<?=$count; ?>" id="quantity-<?=$row['cart_id'];?>" onChange="UpdateProductTotal(<?=$row['cart_id'];?>)" type="number" value="<?=$row['quantity'];?>" class="form-control" min="1" max="9999" style="width: 75px !important;">
+                      <input name="quantity1-<?=$count; ?>" id="quantity-<?=$row['cart_id']?>" onChange="UpdateProductTotal(<?=$row['cart_id']?>)" type="number" value="<?=$row['quantity']?>" class="form-control" min="1" max="9999" style="width: 75px !important;">
                     </td>
-                    <td>&#8377;<span id="price1-<?=$row['cart_id'];?>"></span><span id="price-<?=$count;?>"><?=$row1['price'];?></span></td>
+                    <td>&#8377;<span id="price1-<?=$row['cart_id']?>"></span><span id="price-<?=$count?>"><?=$row1['price']?></span></td>
                     <td>0.00</td>
-                    <input type="hidden" id="price-<?=$row['cart_id'];?>" value="<?=$row1['price'];?>" >
-                    <td>&#8377;<span id="total-<?=$row['cart_id'];?>"><?=$row['quantity']*$row1['price'];?></span></td>
-                    <td><a id="remove-<?=$row['cart_id'];?>" onClick="remove(<?=$row['cart_id'];?>)" > <i class="fa fa-trash-o"></i></a></td>
+                    <input type="hidden" id="price-<?=$row['cart_id']?>" value="<?=$row1['price']?>" >
+                    <td>&#8377;<span id="total-<?=$row['cart_id']?>"><?=$row['quantity']*$row1['price']?></span></td>
+                    <td><a id="remove-<?=$row['cart_id']?>" onClick="remove(<?=$row['cart_id']?>)" > <i class="fa fa-trash-o"></i></a></td>
                   </tr>
                        		
 <?php 
@@ -143,6 +149,10 @@
                   $finalvalue = $total+$tax+$delivery;
                   $ship = $ship + ($row['quantity']*15);
                 }   
+              }
+              if($notAvailableCount>0)
+              {
+                echo "<script>alert('".$notAvailableCount." product not available are removed from cart')</script>";
               }
 ?> 
 						  	<input type="hidden" name="tcount" id="tcount" value="<?=$count;?>" >  
@@ -201,7 +211,7 @@
       </div>
     </div>
     
-	    <?=require('footer.php')?>
+	    <?php require('footer.php')?>
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="vendor/popper.js/umd/popper.min.js"> </script>

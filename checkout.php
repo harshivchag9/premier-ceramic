@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Obaju : e-commerce template</title>
+    <title>Premier Ceramic</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="all,follow">
@@ -26,7 +26,7 @@
   </head>
   <body>
 	  
-  <?= require('header.php')  ?>
+  <?php require('header.php')  ?>
   <div id="all">
     <div id="content">
       <div class="container">
@@ -41,7 +41,7 @@
         </div>
         <div id="checkout" class="col-lg-9">
           <div class="box">
-            <form method="get" action="orderHistory.php">
+            <form method="get" action="your-orders.php">
               <h1>Checkout - Order review</h1>
               <div class="nav flex-column flex-sm-row nav-pills"><a href="checkout1.html" class="nav-link flex-sm-fill text-sm-center"> <i class="fa fa-map-marker">                  </i>Address</a><a href="checkout2.html" class="nav-link flex-sm-fill text-sm-center"> <i class="fa fa-truck">                       </i>Delivery Method</a><a href="checkout3.html" class="nav-link flex-sm-fill text-sm-center"> <i class="fa fa-money">                      </i>Payment Method</a><a href="#" class="nav-link flex-sm-fill text-sm-center active"> <i class="fa fa-eye">                     </i>Order Review</a></div>
                 <div class="content">
@@ -60,65 +60,14 @@
                   }
                 ?>
               </div>
-              <div class="box-footer d-flex justify-content-between"><a class="btn btn-outline-secondary"><i class="fa fa-chevron-left"></i>Back to payment method</a>
-                <button type="submit" class="btn btn-primary">Place an order<i class="fa fa-chevron-right"></i></button>
+              <div class="box-footer d-flex justify-content-between"><a href="basket.php" class="btn btn-outline-secondary"><i class="fa fa-chevron-left"></i>back to cart</a>
+                <button type="submit" class="btn btn-primary">your order<i class="fa fa-chevron-right"></i></button>
               </div>
             </form>
           </div>
         </div>
-        <?php
-          if(isset($_SESSION['loggeduserid']))
-          {
-						require_once("database/database.config.php");
-	          $db = new Database();
-	          $sql = Database::getConnection();
-						$res=$sql->query("select * from cart WHERE User_id = $_SESSION[loggeduserid]");
-						$row = "";
-            $ship=0;$count=0;$delivery=0;$total=0;
-						while($row = mysqli_fetch_array($res))
-						{
-						  $count++;		
-						  $row1=mysqli_fetch_array($sql->query("select * from product_detail WHERE product_id = $row[Product_id]"));
-
-              $total = $total + ($row['quantity']*$row1['price']);
-							$tax = $total*18.00/100;
-							$delivery=$delivery+($row['quantity']*15);
-							$finalvalue = $total+$tax+$delivery;
-							$ship = $ship + ($row['quantity']*15);
-						}   
-  			  }
-        ?>
-          <div class="col-lg-3">
-            <div id="order-summary" class="box" style="width:300px" >
-              <div class="box-header">
-                <h3 class="mb-0">Order summary</h3>
-              </div>
-              <p class="text-muted">Shipping and additional costs are calculated based on the values you have entered.</p>
-              <div  class="table-responsive">
-                <table id="summery" class="table">
-                  <tbody>
-                    <tr>
-                      <td>Order subtotal</td>
-                      <th>&#8377;<span id="subtotal"><?=isset($total)?$total:""?></span></th>
-                    </tr>
-                    <tr>
-                      <td>Shipping and handling</td>
-                      <th>&#8377;<span id="shipping"><?=isset($ship)?$ship:""?></span></th>
-                    </tr>
-                    <tr>
-                      <td>Tax</td>
-                      <th>&#8377;<span id="tax"><?=isset($tax)?$tax:""?></span></th>
-                    </tr>
-                    <tr class="total">
-                      <td>Total</td>
-                      <th>&#8377;<span id="finalvalue"><?=isset($finalvalue)?$finalvalue:""?></span></th>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-
+       
+          
         </div>
       </div>
     </div>
