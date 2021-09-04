@@ -1,9 +1,22 @@
 # php-Assigment
 Email a random XKCD challenge
 
-## Info
-link :[ harshivchag.me/rtcamp/Assignment](https://harshivchag.me/rtcamp/Assignment)
+[here](https://harshivchag.me/rtcamp/assignment) you can see live demo of this assignment
 
-Resume : [link](https://harshivchag.me/assets/Resume.pdf)
+![Image](https://github.com/harshivchag9/harshivchag/blob/master/rtcamp/assets/git1.jpg)
 
-[LinkedIn](https://www.linkedin.com/in/harshivchag/) |  [Git](https://github.com/harshivchag9) | [Website](https://harshivchag.me)
+## Information
+|  |  |
+| --- | --- |
+| Name | Harshiv Deepak Chag |
+| Organization Email | [hchag502@rku.ac.in](mailto:hchag502@rku.ac.in) |
+| Persoal Email | [harshivchag@gmail.com](mailto:harshivchag@gmail.com) |
+| Wesite | [harshivchag.me](https://www.harshivchag.me/) |
+| LinkedIn | [@harshivchag](https://www.linkedin.com/in/harshivchag/) |
+| Resume | [pdf](https://harshivchag.me/assets/Resume.pdf) |
+| Git | [@harshivchag9](https://github.com/harshivchag9)  |
+
+
+
+
+
