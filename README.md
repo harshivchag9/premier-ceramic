@@ -1,5 +1,9 @@
-# premier-ceramic
-Online Ceramic Marketing Portal
+# php-Assigment
+Email a random XKCD challenge
 
-# Document of Project or Project SRS
-http://www.harshivchag.tk/
+## Info
+link :[ harshivchag.me/rtcamp/Assignment](https://harshivchag.me/rtcamp/Assignment)
+
+Resume : [link](https://harshivchag.me/assets/Resume.pdf)
+
+[LinkedIn](https://www.linkedin.com/in/harshivchag/)   [Git](https://github.com/harshivchag9) [Website](https://harshivchag.me)
